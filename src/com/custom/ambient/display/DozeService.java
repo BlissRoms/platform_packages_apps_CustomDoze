@@ -64,18 +64,14 @@ public class DozeService extends Service {
 
     private void onDisplayOn() {
         if (DEBUG) Log.d(TAG, "Display on");
+        mTiltSensor.disable();
         mProximitySensor.disable();
-        if (Utils.tiltGestureEnabled(this)) {
-            mTiltSensor.disable();
-        }
     }
 
     private void onDisplayOff() {
         if (DEBUG) Log.d(TAG, "Display off");
+        mTiltSensor.enable();
         mProximitySensor.enable();
-        if (Utils.tiltGestureEnabled(this)) {
-            mTiltSensor.enable();
-        }
     }
 
     private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {

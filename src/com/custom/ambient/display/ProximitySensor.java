@@ -53,6 +53,10 @@ public class ProximitySensor implements SensorEventListener {
         mExecutorService = Executors.newSingleThreadExecutor();
     }
 
+    private Future<?> submit(Runnable runnable) {
+        return mExecutorService.submit(runnable);
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         boolean isNear = event.values[0] < mSensor.getMaximumRange();
@@ -64,10 +68,6 @@ public class ProximitySensor implements SensorEventListener {
             mInPocketTime = event.timestamp;
         }
         mSawNear = isNear;
-    }
-
-    private Future<?> submit(Runnable runnable) {
-        return mExecutorService.submit(runnable);
     }
 
     private boolean shouldPulse(long timestamp) {

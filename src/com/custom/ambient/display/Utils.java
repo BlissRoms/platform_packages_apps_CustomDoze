@@ -20,6 +20,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -33,7 +34,6 @@ public final class Utils {
     private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
 
     protected static final String AMBIENT_DISPLAY_KEY = "ambient_display";
-    protected static final String PICK_UP_KEY = "pick_up";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
 
@@ -66,19 +66,14 @@ public final class Utils {
                 Settings.Secure.DOZE_ENABLED, 1) != 0;
     }
 
-    protected static boolean pickUpEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(PICK_UP_KEY, false);
-    }
-
     protected static boolean handwaveGestureEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(GESTURE_HAND_WAVE_KEY, false);
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_HANDWAVE_GESTURE, 0) != 0;
     }
 
     protected static boolean pocketGestureEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(GESTURE_POCKET_KEY, false);
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_POCKETMODE_GESTURE, 0) != 0;
     }
 
     protected static boolean enableDoze(boolean enable, Context context) {
@@ -88,22 +83,18 @@ public final class Utils {
         return enabled;
     }
 
-    protected static boolean enablePickUp(boolean enable, Context context) {
-        // shared pref value already updated by DozeSettings.onPreferenceChange
-        manageService(context);
-        return enable;
-    }
-
     protected static boolean enableHandWave(boolean enable, Context context) {
-        // shared pref value already updated by DozeSettings.onPreferenceChange
+        boolean enabled = Settings.System.putInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_HANDWAVE_GESTURE, enable ? 1 : 0);
         manageService(context);
-        return enable;
+        return enabled;
     }
 
     protected static boolean enablePocketMode(boolean enable, Context context) {
-        // shared pref value already updated by DozeSettings.onPreferenceChange
+        boolean enabled = Settings.System.putInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_POCKETMODE_GESTURE, enable ? 1 : 0);
         manageService(context);
-        return enable;
+        return enabled;
     }
 
     private static void manageService(Context context) {
@@ -121,7 +112,7 @@ public final class Utils {
     }
 
     protected static boolean sensorsEnabled(Context context) {
-        return pickUpEnabled(context) || handwaveGestureEnabled(context)
+        return handwaveGestureEnabled(context)
                 || pocketGestureEnabled(context);
     }
 }

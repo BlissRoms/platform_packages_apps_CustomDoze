@@ -62,6 +62,7 @@ public class DozeSettings extends PreferenceActivity implements OnPreferenceChan
 
         mPickUpPreference =
             (SwitchPreference) findPreference(Utils.PICK_UP_KEY);
+        mPickUpPreference.setChecked(Utils.tiltGestureEnabled(mContext));
         mPickUpPreference.setOnPreferenceChangeListener(this);
 
         mHandwavePreference =

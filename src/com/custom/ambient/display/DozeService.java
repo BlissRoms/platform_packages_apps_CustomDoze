@@ -65,7 +65,7 @@ public class DozeService extends Service {
     private void onDisplayOn() {
         if (DEBUG) Log.d(TAG, "Display on");
         mProximitySensor.disable();
-        if (Utils.pickUpEnabled(this)) {
+        if (Utils.tiltGestureEnabled(this)) {
             mTiltSensor.disable();
         }
     }
@@ -73,7 +73,7 @@ public class DozeService extends Service {
     private void onDisplayOff() {
         if (DEBUG) Log.d(TAG, "Display off");
         mProximitySensor.enable();
-        if (Utils.pickUpEnabled(this)) {
+        if (Utils.tiltGestureEnabled(this)) {
             mTiltSensor.enable();
         }
     }

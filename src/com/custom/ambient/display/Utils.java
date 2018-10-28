@@ -91,7 +91,7 @@ public final class Utils {
                 Settings.Secure.DOZE_ENABLED, 1) != 0;
     }
 
-    protected static boolean pickUpEnabled(Context context) {
+    protected static boolean tiltGestureEnabled(Context context) {
         return Settings.System.getInt(context.getContentResolver(),
                 Settings.System.CUSTOM_AMBIENT_TILT_GESTURE, 0) != 0;
     }
@@ -150,7 +150,7 @@ public final class Utils {
     }
 
     protected static boolean sensorsEnabled(Context context) {
-        return pickUpEnabled(context) || handwaveGestureEnabled(context)
+        return tiltGestureEnabled(context) || handwaveGestureEnabled(context)
                 || pocketGestureEnabled(context);
     }
 }

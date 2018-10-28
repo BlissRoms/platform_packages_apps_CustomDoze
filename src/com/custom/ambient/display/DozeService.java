@@ -61,18 +61,12 @@ public class DozeService extends Service {
 
     private void onDisplayOn() {
         if (DEBUG) Log.d(TAG, "Display on");
-        /*if (Utils.handwaveGestureEnabled(this) ||
-                Utils.pocketGestureEnabled(this)) {*/
-            mProximitySensor.disable();
-        //}
+        mProximitySensor.disable();
     }
 
     private void onDisplayOff() {
         if (DEBUG) Log.d(TAG, "Display off");
-        /*if (Utils.handwaveGestureEnabled(this) ||
-                Utils.pocketGestureEnabled(this)) {*/
-            mProximitySensor.enable();
-        //}
+        mProximitySensor.enable();
     }
 
     private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {

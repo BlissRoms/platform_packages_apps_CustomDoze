@@ -37,6 +37,7 @@ public final class Utils {
 
     protected static final String AOD_KEY = "always_on_ambient";
     protected static final String AMBIENT_DISPLAY_KEY = "ambient_display";
+    protected static final String PICK_UP_KEY = "pick_up";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
 
@@ -90,6 +91,11 @@ public final class Utils {
                 Settings.Secure.DOZE_ENABLED, 1) != 0;
     }
 
+    protected static boolean pickUpEnabled(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_TILT_GESTURE, 0) != 0;
+    }
+
     protected static boolean handwaveGestureEnabled(Context context) {
         return Settings.System.getInt(context.getContentResolver(),
                 Settings.System.CUSTOM_AMBIENT_HANDWAVE_GESTURE, 0) != 0;
@@ -104,6 +110,14 @@ public final class Utils {
         boolean enabled = Settings.Secure.putInt(context.getContentResolver(),
                 Settings.Secure.DOZE_ENABLED, enable ? 1 : 0);
         // don't start the service, for notifications pulse we don't need the proximity sensor check here
+        return enabled;
+    }
+
+    protected static boolean enablePickUp(boolean enable, Context context) {
+        // shared pref value already updated by DozeSettings.onPreferenceChange
+        boolean enabled = Settings.System.putInt(context.getContentResolver(),
+                Settings.System.CUSTOM_AMBIENT_TILT_GESTURE, enable ? 1 : 0);
+        manageService(context);
         return enabled;
     }
 
@@ -136,7 +150,7 @@ public final class Utils {
     }
 
     protected static boolean sensorsEnabled(Context context) {
-        return handwaveGestureEnabled(context)
+        return pickUpEnabled(context) || handwaveGestureEnabled(context)
                 || pocketGestureEnabled(context);
     }
 }

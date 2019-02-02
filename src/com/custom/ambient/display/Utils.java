@@ -36,7 +36,7 @@ public final class Utils {
     private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
 
     protected static final String AOD_KEY = "always_on_ambient";
-    protected static final String AOD_CHARGE_KEY = "doze_on_charge";
+    protected static final String DOZE_ON_CHARGE = "doze_on_charge";
     protected static final String AMBIENT_DISPLAY_KEY = "ambient_display";
     protected static final String PICK_UP_KEY = "pick_up";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
@@ -93,6 +93,11 @@ public final class Utils {
                 Settings.Secure.DOZE_ENABLED, 1) != 0;
     }
 
+    protected static boolean dozeOnChargeEnabled(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.DOZE_ON_CHARGE, 0) != 0;
+    }
+
     protected static boolean tiltGestureEnabled(Context context) {
         return Settings.System.getInt(context.getContentResolver(),
                 Settings.System.CUSTOM_AMBIENT_TILT_GESTURE, 0) != 0;
@@ -112,6 +117,13 @@ public final class Utils {
         boolean enabled = Settings.Secure.putInt(context.getContentResolver(),
                 Settings.Secure.DOZE_ENABLED, enable ? 1 : 0);
         // don't start the service, for notifications pulse we don't need the proximity sensor check here
+        return enabled;
+    }
+
+    protected static boolean enableDozeOnCharge(boolean enable, Context context) {
+        boolean enabled = Settings.System.putInt(context.getContentResolver(),
+                Settings.System.DOZE_ON_CHARGE, enable ? 1 : 0);
+        manageService(context);
         return enabled;
     }
 

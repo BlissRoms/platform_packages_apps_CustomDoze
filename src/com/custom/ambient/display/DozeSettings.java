@@ -61,6 +61,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
         private ActionBar actionBar;
         private SwitchPreference mAoDPreference;
         private SwitchPreference mAmbientDisplayPreference;
+        private SwitchPreference mPickUpPreference;
         private SwitchPreference mHandwavePreference;
         private SwitchPreference mPocketPreference;
         private Preference mBrightnessLevels;
@@ -89,6 +90,11 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
                 (SwitchPreference) findPreference(Utils.AMBIENT_DISPLAY_KEY);
             mAmbientDisplayPreference.setChecked(Utils.isDozeEnabled(mContext));
             mAmbientDisplayPreference.setOnPreferenceChangeListener(this);
+
+            mPickUpPreference =
+                (SwitchPreference) findPreference(Utils.PICK_UP_KEY);
+            mPickUpPreference.setChecked(Utils.tiltGestureEnabled(mContext));
+            mPickUpPreference.setOnPreferenceChangeListener(this);
 
             mHandwavePreference =
                 (SwitchPreference) findPreference(Utils.GESTURE_HAND_WAVE_KEY);
@@ -125,6 +131,10 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
                 mAmbientDisplayPreference.setChecked(value);
                 Utils.enableDoze(value, mContext);
                 return true;
+            } else if (Utils.PICK_UP_KEY.equals(key)) {
+                mPickUpPreference.setChecked(value);
+                Utils.enablePickUp(value, mContext);
+                return true;
             } else if (Utils.GESTURE_HAND_WAVE_KEY.equals(key)) {
                 mHandwavePreference.setChecked(value);
                 Utils.enableHandWave(value, mContext);
@@ -140,6 +150,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
         private void setPrefs() {
             final boolean aodEnabled = Utils.isAoDEnabled(mContext);
             mAmbientDisplayPreference.setEnabled(!aodEnabled);
+            mPickUpPreference.setEnabled(!aodEnabled);
             mHandwavePreference.setEnabled(!aodEnabled);
             mPocketPreference.setEnabled(!aodEnabled);
         }

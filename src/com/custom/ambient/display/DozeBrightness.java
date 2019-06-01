@@ -31,7 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import org.candy.support.preferences.CustomSeekBarPreference;
+import com.bliss.support.preferences.CustomSeekBarPreference;
 
 public class DozeBrightness extends PreferenceActivity implements PreferenceFragment.OnPreferenceStartFragmentCallback {
 

@@ -23,7 +23,7 @@
         android:summary="@string/aod_setting_summary" />
 
     <com.bliss.support.preferences.SystemSettingSwitchPreference
-        android:key="doze_on_charge_now"
+        android:key="doze_on_charge"
         android:defaultValue="false"
         android:title="@string/doze_on_charge_title"
         android:summary="@string/doze_on_charge_summary" />

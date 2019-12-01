@@ -103,7 +103,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
             mAmbientDisplayPreference.setOnPreferenceChangeListener(this);
 
             mDozeOnChargePreference =
-                (SwitchPreference) findPreference(Utils.OMNI_DOZE_ON_CHARGE);
+                (SwitchPreference) findPreference(Utils.DOZE_ON_CHARGE);
             mDozeOnChargePreference.setChecked(Utils.dozeOnChargeEnabled(mContext));
             mDozeOnChargePreference.setOnPreferenceChangeListener(this);
 
@@ -162,7 +162,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
                 mAmbientDisplayPreference.setChecked(value);
                 Utils.enableDoze(value, mContext);
                 return true;
-            } else if (Utils.OMNI_DOZE_ON_CHARGE.equals(key)) {
+            } else if (Utils.DOZE_ON_CHARGE.equals(key)) {
                 mDozeOnChargePreference.setChecked(value);
                 Utils.enableDozeOnCharge(value, mContext);
                 return true;

@@ -44,6 +44,8 @@ public final class Utils {
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
     protected static final String DOUBLE_TAP_KEY = "doze_trigger_doubletap";
     protected static final String MUSIC_TICKER_KEY = "pulse_on_new_tracks";
+    protected static final String OMNI_DOZE_BRIGHTNESS_KEY = "doze_brightness";
+    protected static final String OMNI_PULSE_BRIGHTNESS_KEY = "pulse_brightness";
 
     protected static void startService(Context context) {
         if (DEBUG) Log.d(TAG, "Starting service");

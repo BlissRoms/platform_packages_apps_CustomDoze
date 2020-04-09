@@ -54,4 +54,8 @@
     <string name="brightness_title">Brightness</string>
     <string name="ambient_pulse_brightness_title">Ambient display brightness</string>
     <string name="ambient_doze_brightness_title">Always on display brightness</string>
+
+    <!-- Raise to wake strings-->
+    <string name="raise_to_wake_gesture_title">Raise to wake</string>
+    <string name="raise_to_wake_gesture_summary">Wake up the device instead of pulsing notification</string>
 </resources>

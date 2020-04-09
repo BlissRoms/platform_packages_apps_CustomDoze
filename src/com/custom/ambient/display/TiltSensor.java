@@ -33,6 +33,7 @@ public class TiltSensor implements SensorEventListener {
 
     private static final int SENSOR_WAKELOCK_DURATION = 200;
     private static final int MIN_PULSE_INTERVAL_MS = 2500;
+    private static final int WAKELOCK_TIMEOUT_MS = 3000;
 
     private PowerManager mPowerManager;
     private SensorManager mSensorManager;
@@ -62,17 +63,24 @@ public class TiltSensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+	boolean raiseToWakeEnabled = Utils.raiseToWakeGestureEnabled(mContext);
         if (DEBUG) Log.d(TAG, "Got sensor event: " + event.values[0]);
 
         long delta = SystemClock.elapsedRealtime() - mEntryTimestamp;
-        if (delta < MIN_PULSE_INTERVAL_MS) {
+	if (delta < (raiseToWakeEnabled ? 0 : MIN_PULSE_INTERVAL_MS)) {
             return;
-        } else {
-            mEntryTimestamp = SystemClock.elapsedRealtime();
         }
 
+        mEntryTimestamp = SystemClock.elapsedRealtime();
+
         if (event.values[0] == 1) {
-            Utils.launchDozePulse(mContext);
+	    if (raiseToWakeEnabled) {
+                mSensorWakeLock.acquire(WAKELOCK_TIMEOUT_MS);
+                mPowerManager.wakeUp(SystemClock.uptimeMillis(),
+                    PowerManager.WAKE_REASON_GESTURE, TAG);
+            } else {
+                Utils.launchDozePulse(mContext);
+            }
         }
     }
 

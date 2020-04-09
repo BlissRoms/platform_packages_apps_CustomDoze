@@ -74,6 +74,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
         private SwitchPreference mDozeOnChargePreference;
         private SwitchPreference mAmbientDisplayPreference;
         private SwitchPreference mPickUpPreference;
+        private SwitchPreference mRaiseToWakePreference;
         private SwitchPreference mHandwavePreference;
         private SwitchPreference mPocketPreference;
         private SystemSettingSwitchPreference mDoubleTapPreference;
@@ -123,6 +124,10 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
             mPickUpPreference.setChecked(Utils.tiltGestureEnabled(mContext));
             mPickUpPreference.setOnPreferenceChangeListener(this);
 
+	    mRaiseToWakePreference = (SwitchPreference) findPreference(Utils.GESTURE_RAISE_TO_WAKE_KEY);
+            mRaiseToWakePreference.setChecked(Utils.raiseToWakeGestureEnabled(mContext));
+            mRaiseToWakePreference.setOnPreferenceChangeListener(this);
+
             mHandwavePreference =
                 (SwitchPreference) findPreference(Utils.GESTURE_HAND_WAVE_KEY);
             mHandwavePreference.setChecked(Utils.handwaveGestureEnabled(mContext));
@@ -157,6 +162,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
             if (!getResources().getBoolean(R.bool.has_tilt_sensor)) {
                 getPreferenceScreen().removePreference(mTiltCategory);
                 getPreferenceScreen().removePreference(mPickUpPreference);
+                getPreferenceScreen().removePreference(mRaiseToWakePreference);
             }
 
             mProximitySensorCategory =
@@ -197,6 +203,11 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
                 mPickUpPreference.setChecked(value);
                 Utils.enablePickUp(value, mContext);
                 return true;
+            } else if (Utils.GESTURE_RAISE_TO_WAKE_KEY.equals(key)) {
+                boolean value = (Boolean) newValue;
+                mRaiseToWakePreference.setChecked(value);
+                Utils.enableRaiseToWake(value, mContext);
+                return true;
             } else if (Utils.GESTURE_HAND_WAVE_KEY.equals(key)) {
                 boolean value = (Boolean) newValue;
                 mHandwavePreference.setChecked(value);
@@ -233,6 +244,7 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
             mAmbientDisplayPreference.setEnabled(!aodEnabled);
             mDozeOnChargePreference.setEnabled(!aodEnabled);
             mPickUpPreference.setEnabled(!aodEnabled);
+            mRaiseToWakePreference.setEnabled(!aodEnabled);
             mHandwavePreference.setEnabled(!aodEnabled);
             mPocketPreference.setEnabled(!aodEnabled);
             mDoubleTapPreference.setEnabled(!aodEnabled);

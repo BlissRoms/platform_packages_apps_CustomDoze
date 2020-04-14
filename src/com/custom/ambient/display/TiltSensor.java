@@ -42,6 +42,9 @@ public class TiltSensor implements SensorEventListener {
     private WakeLock mSensorWakeLock;
     private Context mContext;
 
+    private Sensor mProximitySensor;
+    private boolean mInsidePocket = false;
+
     private long mEntryTimestamp;
 
     public TiltSensor(Context context) {
@@ -57,6 +60,7 @@ public class TiltSensor implements SensorEventListener {
             } else {
                 mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR);
             }
+	    mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY, false);
         }
         mSensorWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "SensorWakeLock");
@@ -74,7 +78,10 @@ public class TiltSensor implements SensorEventListener {
 
         mEntryTimestamp = SystemClock.elapsedRealtime();
 
-        if (event.values[0] == 1) {
+	if (!raiseToWakeEnabled && !Utils.pocketGestureEnabled(mContext))
+	    mInsidePocket = false;
+
+        if (event.values[0] == 1 && !mInsidePocket) {
 	    if (raiseToWakeEnabled) {
                 mSensorWakeLock.acquire(WAKELOCK_TIMEOUT_MS);
                 mPowerManager.wakeUp(SystemClock.uptimeMillis(),
@@ -90,16 +97,35 @@ public class TiltSensor implements SensorEventListener {
         /* Empty */
     }
 
+    private SensorEventListener mProximityListener = new SensorEventListener() {
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+	    mInsidePocket = event.values[0] < mProximitySensor.getMaximumRange();
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	    // stub
+	}
+    };
+
     protected void enable() {
         if (DEBUG) Log.d(TAG, "Enabling");
         mSensorManager.registerListener(this, mSensor,
                 SensorManager.SENSOR_DELAY_NORMAL);
+	if (Utils.raiseToWakeGestureEnabled(mContext)) {
+	    mSensorManager.registerListener(mProximityListener, mProximitySensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+	}
         mEntryTimestamp = SystemClock.elapsedRealtime();
     }
 
     protected void disable() {
         if (DEBUG) Log.d(TAG, "Disabling");
         mSensorManager.unregisterListener(this, mSensor);
+	if (Utils.raiseToWakeGestureEnabled(mContext)) {
+	    mSensorManager.unregisterListener(mProximityListener, mProximitySensor);
+	}
     }
 }
 

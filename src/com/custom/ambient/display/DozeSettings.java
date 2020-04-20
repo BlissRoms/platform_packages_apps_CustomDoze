@@ -169,7 +169,6 @@ public class DozeSettings extends PreferenceActivity implements PreferenceFragme
                 (PreferenceCategory) findPreference(KEY_CATEGORY_PROXIMITY_SENSOR);
             if (!getResources().getBoolean(R.bool.has_proximity_sensor)) {
                 getPreferenceScreen().removePreference(mProximitySensorCategory);
-                getPreferenceScreen().removePreference(mDozeOnChargePreference);
                 getPreferenceScreen().removePreference(mHandwavePreference);
                 getPreferenceScreen().removePreference(mPocketPreference);
             }

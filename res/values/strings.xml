@@ -58,4 +58,8 @@
     <!-- Raise to wake strings-->
     <string name="raise_to_wake_gesture_title">Raise to wake</string>
     <string name="raise_to_wake_gesture_summary">Wake up the device instead of pulsing notification</string>
+
+    <!-- Brightness -->
+    <string name="doze_brightness_force_title">Force brightness values</string>
+    <string name="doze_brightness_force_summary">Use custom brightness values instead of screen brightness</string>
 </resources>
